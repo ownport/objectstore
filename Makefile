@@ -3,7 +3,7 @@ prepare-env:
 	@ pip install -U xattr
 
 
-prepare-dev-env:
+prepare-dev-env: prepare-env
 	@ echo 'install/update `nose`'
 	@ pip install -U nose
 	@ echo 'install/update `coverage`'

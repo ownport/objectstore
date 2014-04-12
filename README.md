@@ -22,6 +22,10 @@ $ pip install python-xattr
 $ pip install nose
 $ pip install coverage
 ```
+or 
+```
+$ make prepare-dev-env
+```
 
 In case if your file system does not support external attributes you can create image file and mount it:
 ```
