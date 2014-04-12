@@ -23,6 +23,13 @@ $ pip install nose
 $ pip install coverage
 ```
 
+In case if your file system does not support external attributes you can create image file and mount it:
+```
+$ fallocate -l 4G objectstore.img
+$ mkfs.ext4 objectstore.img
+$ sudo mount -t ext4 -o loop,rw,use_xattr objectstore.img tests/store/
+```
+
 ## Links to similar topics
 
 - [OpenStack/Swift](http://docs.openstack.org/developer/swift/index.html) is a highly available, distributed, 
