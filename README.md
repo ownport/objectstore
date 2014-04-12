@@ -7,7 +7,7 @@ Simple storage for file-based objects based on file system with [extended attrib
 
 `objectstore` based on:
 - file system should support extended attributes
-- python-xattr should be installed
+- [python-xattr](https://pypi.python.org/pypi/xattr) should be installed
 ```
 $ pip install python-xattr
 ```
