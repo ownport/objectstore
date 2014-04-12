@@ -16,7 +16,12 @@ $ pip install python-xattr
 
 `objectstore` can be used as library or as console application
 
+## For developers
 
+```
+$ pip install nose
+$ pip install coverage
+```
 
 ## Links to similar topics
 
