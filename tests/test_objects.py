@@ -4,14 +4,6 @@ from objectstore.api import objects
 
 class TestBucket(unittest.TestCase):
 
-    def setUp(self):
-
-        pass
-
-    def tearDown(self):
-
-        pass
-
     def test_object_get_metadata_from_header(self):
 
         self.assertEqual(objects.get_metadata_from_headers({}), {})

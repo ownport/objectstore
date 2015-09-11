@@ -1,29 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import json
-import shutil
-import tempfile
-
 import falcon
-import falcon.testing as testing
 
 from objectstore.api import service
-from objectstore.api import buckets
+
+from test_objectstore import ObjectStoreTestBase
 
 
-class TestObjectStoreService(testing.TestBase):
-
-    def before(self):
-
-        self.storage_path = tempfile.mkdtemp(dir='/tmp/')
-        self.api.add_route('/service', service.ServiceAPI(storage_path=self.storage_path))
-        self.api.add_route('/bucket', buckets.BucketCollectionAPI(storage_path=self.storage_path))
-
-
-    def after(self):
-
-        shutil.rmtree(self.storage_path)
-
+class TestObjectStoreService(ObjectStoreTestBase):
 
     def test_service_ok(self):
 

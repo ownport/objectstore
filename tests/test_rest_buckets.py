@@ -1,28 +1,12 @@
 # -*- coding: utf-8 -*-
 
-import os
 import json
-import shutil
-import tempfile
-
 import falcon
-import falcon.testing as testing
 
-from objectstore.api import service
-from objectstore.api import buckets
+from test_objectstore import ObjectStoreTestBase
 
 
-class TestObjectStoreBucketCollection(testing.TestBase):
-
-    def before(self):
-
-        self.storage_path = tempfile.mkdtemp(dir='/tmp/')
-        self.api.add_route('/bucket', buckets.BucketCollectionAPI(storage_path=self.storage_path))
-
-
-    def after(self):
-
-        shutil.rmtree(self.storage_path)
+class TestObjectStoreBucketCollection(ObjectStoreTestBase):
 
 
     def test_bucket_collection_options(self):
@@ -82,13 +66,7 @@ class TestObjectStoreBucketCollection(testing.TestBase):
 
 
 
-class TestObjectStoreIncorrectStoragePath(testing.TestBase):
-
-    def before(self):
-
-        self.storage_path = tempfile.mkdtemp(dir='/tmp/')
-        self.api.add_route('/bucket', buckets.BucketCollectionAPI(storage_path=self.storage_path))
-        self.api.add_route('/bucket/{bucket_name}', buckets.BucketAPI(storage_path=self.storage_path))
+class TestObjectStoreIncorrectStoragePath(ObjectStoreTestBase):
 
 
     def test_incorrect_storage_path(self):
@@ -96,25 +74,14 @@ class TestObjectStoreIncorrectStoragePath(testing.TestBase):
         body = self.simulate_request('/bucket', method='PUT', query_string='name=incorrect-storage-path')
         self.assertEqual(self.srmock.status, falcon.HTTP_200)
 
-        shutil.rmtree(self.storage_path)
+        self.remove_storage_path()
 
         body = self.simulate_request('/bucket/incorrect-storage-path', method='HEAD')
         self.assertEqual(self.srmock.status, falcon.HTTP_500)
 
 
 
-class TestObjectStoreBucket(testing.TestBase):
-
-    def before(self):
-
-        self.storage_path = tempfile.mkdtemp(dir='/tmp/')
-        self.api.add_route('/bucket', buckets.BucketCollectionAPI(storage_path=self.storage_path))
-        self.api.add_route('/bucket/{bucket_name}', buckets.BucketAPI(storage_path=self.storage_path))
-
-
-    def after(self):
-
-        shutil.rmtree(self.storage_path)
+class TestObjectStoreBucket(ObjectStoreTestBase):
 
 
     def test_bucket_options(self):

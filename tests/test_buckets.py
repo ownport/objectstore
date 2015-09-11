@@ -1,23 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import falcon
-import shutil
-import unittest
-import tempfile
 
 from objectstore.api import buckets
 
-
-class TestBucket(unittest.TestCase):
-
-    def setUp(self):
-
-        self.storage_path = tempfile.mkdtemp(dir='/tmp/')        
+from test_objectstore import ObjectStoreTestBase
 
 
-    def tearDown(self):
 
-        shutil.rmtree(self.storage_path)
+class TestBucket(ObjectStoreTestBase):
 
 
     def test_bucket_metadata(self):
@@ -38,7 +29,7 @@ class TestBucket(unittest.TestCase):
         self.assertRaises(falcon.HTTPNotFound, bucket.delete)
 
 
-class TestBucketCollection(unittest.TestCase):
+class TestBucketCollection(ObjectStoreTestBase):
 
     def test_incorrect_storage_path(self):
 
