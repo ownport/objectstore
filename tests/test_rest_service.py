@@ -28,7 +28,7 @@ class TestObjectStoreService(ObjectStoreTestBase):
         self.assertEqual(self.srmock.status, falcon.HTTP_200)
         self.assertEqual(
             [json.loads(e) for e in body],
-            [{"buckets": [{"name": "bucket-list-02"}, {"name": "bucket-list-01"}]}]
+            [{u"buckets": [{u"name": u"bucket-list-02"}, {u"name": u"bucket-list-01"}]}]
         )
 
 
