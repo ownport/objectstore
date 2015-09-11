@@ -1,6 +1,8 @@
 ObjectStore
 ===========
 
+[![Build Status](https://travis-ci.org/ownport/objectstore.svg)](https://travis-ci.org/ownport/objectstore)
+
 ObjectStore is object storage which uses file-based objects (content and metadata) into local filesystem. 
 
 - No need to think how to optimize many file locations on filesystem. Objectstore saves objects using 
