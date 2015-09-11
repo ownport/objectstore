@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import falcon
 
 from test_objectstore import ObjectStoreTestBase
