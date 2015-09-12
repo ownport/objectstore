@@ -26,9 +26,15 @@ class TestObjectStoreService(ObjectStoreTestBase):
 
         body = self.simulate_request('/service', method='GET')
         self.assertEqual(self.srmock.status, falcon.HTTP_200)
+
+        result = [json.loads(e) for e in body]
+        self.assertEqual(type(result), list)
+        self.assertEqual(len(result), 1)
+
+        buckets_list = result[0][u"buckets"]
         self.assertEqual(
-            [json.loads(e) for e in body],
-            [{u"buckets": [{u"name": u"bucket-list-02"}, {u"name": u"bucket-list-01"}]}]
+            [b[u"name"] for b in buckets_list].sort(), 
+            [u"bucket-list-01",u"bucket-list-02"].sort()
         )
 
 
