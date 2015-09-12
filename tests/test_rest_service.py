@@ -41,7 +41,6 @@ class TestObjectStoreService(ObjectStoreTestBase):
     def test_service_storage_path_is_not_defined(self):
 
         self.api = falcon.API()
-        with self.assertRaises(RuntimeError):
-            self.api.add_route('/service', service.ServiceAPI(storage_path=None))
+        self.assertRaises(RuntimeError, service.ServiceAPI, storage_path=None)
 
 
