@@ -94,6 +94,7 @@ class ObjectAPI(BaseAPI):
         metadata['content-name'] = object_id
 
         bucket = Bucket(bucket_name=bucket_name, storage_path=self._storage_path)
+
         if bucket.exists():
             bucket_object = BucketObject(bucket=bucket)
             bucket_object.metadata = metadata
@@ -156,9 +157,13 @@ class ObjectAPI(BaseAPI):
             bucket=Bucket(bucket_name=bucket_name, storage_path=self._storage_path)
         )
         if bucket_object.exists():
-            resp.content_type = bucket_object.metadata['content-type']
+            if 'content-type' in bucket_object.metadata:
+                resp.content_type = bucket_object.metadata['content-type']
+            for k,v in bucket_object.metadata.items():
+                resp.set_header(k,v)
             resp.stream = open(bucket_object.filepath, 'rb')
             resp.stream_len = bucket_object.metadata['content-length']
+
         else:
             raise falcon.HTTPNotFound()
 
@@ -199,12 +204,11 @@ class BucketObject(object):
             )
 
         # metadata key used for object identification in the storage
+        self._metadata = dict()
         if 'object-key' in self._bucket.metadata and self._bucket.metadata['object-key'] in ['content-md5', 'content-sha1']:            
             self.OBJECT_KEY_BASE=self._bucket.metadata['object-key']
         else:
             self.OBJECT_KEY_BASE='content-sha1'
-
-        self._metadata = dict()
         self._objects_metadata = SqliteDict(os.path.join(bucket.bucket_path,'metadata.sqlite'), 'objects', autocommit=True)
 
 
@@ -259,10 +263,19 @@ class BucketObject(object):
     def store(self, stream=None):
         ''' store object into bucket
         '''
-        if not stream or not isinstance(stream, gunicorn.http.body.Body):
+
+        # TODO: for later analysis
+
+        # if not stream or not isinstance(stream, gunicorn.http.body.Body):
+        #     raise falcon.HTTPInternalServerError(
+        #         title = 'InvalidStreamType',
+        #         description = 'The Stream type is invalid, %s' % type(stream)
+        #     )
+
+        if not stream:
             raise falcon.HTTPInternalServerError(
-                title = 'InvalidStreamType',
-                description = 'The Stream type is invalid, %s' % type(stream)
+                title = 'FileEmpty',
+                description = 'Attempt to store empty file'
             )
 
         temp_filepath = None

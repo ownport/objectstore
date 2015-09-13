@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 
+import os
+import shutil
+import tempfile
 import unittest
 
 from objectstore.api import objects
+from objectstore.api import buckets
+
 
 class TestBucket(unittest.TestCase):
 
@@ -30,4 +35,33 @@ class TestBucket(unittest.TestCase):
         self.assertEqual(objects.pairtree_path('1234567890', pairs=3), '12/34/56/1234567890')
 
 
-        
+    def test_object_movefile(self):
+
+        try:
+            handler, source = tempfile.mkstemp(dir='/tmp')
+            tmp_path = tempfile.mkdtemp(dir='/tmp')
+            target_dir = os.path.join(tmp_path, 'movefile/')
+
+            objects.movefile(source, target_dir)
+            self.assertTrue(
+                os.path.exists( os.path.join(target_dir, os.path.basename(source)) )
+            )
+
+        finally:
+            if os.path.exists(source):
+                os.remove(source)
+
+            if os.path.exists(tmp_path):
+                shutil.rmtree(tmp_path)
+
+
+    def test_get_metadata(self):
+
+        storage_path = tempfile.mkdtemp(dir='/tmp/')
+        bucket = buckets.Bucket('b1', storage_path=storage_path)
+        bucket.create()
+
+        obj = objects.BucketObject('o1', bucket=bucket)
+        self.assertEqual(obj.metadata, {})
+
+
