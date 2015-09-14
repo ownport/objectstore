@@ -23,7 +23,7 @@ to be described later
 
 ## How to use
 
-to be described later
+to be described later.
 
 
 ## For developers
